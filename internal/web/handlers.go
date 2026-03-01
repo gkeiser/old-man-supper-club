@@ -31,14 +31,21 @@ type TemplateData struct {
 	Restaurant      *models.Restaurant
 	Reviews         []models.Review
 	OverallScore    float64
+	Weights         map[string]float64
 }
 
 func NewServer(authCfg *auth.Config, repo *db.Repository, tmplFS embed.FS) *Server {
 	templates := make(map[string]*template.Template)
 
+	funcMap := template.FuncMap{
+		"multiply": func(a, b float64) float64 {
+			return a * b
+		},
+	}
+
 	pages := []string{"home.html", "leaderboard.html", "restaurant_details.html", "add_restaurant.html"}
 	for _, page := range pages {
-		tmpl := template.Must(template.ParseFS(tmplFS, "templates/base.html", "templates/"+page))
+		tmpl := template.Must(template.New(page).Funcs(funcMap).ParseFS(tmplFS, "templates/base.html", "templates/"+page))
 		templates[page] = tmpl
 	}
 
@@ -94,6 +101,7 @@ func (s *Server) HandleLeaderboard(w http.ResponseWriter, r *http.Request) {
 		IsAuthenticated: userID != "",
 		UserName:        userName,
 		Restaurants:     restaurants,
+		Weights:         weights,
 	})
 }
 
