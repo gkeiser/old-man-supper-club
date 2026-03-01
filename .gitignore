@@ -33,3 +33,9 @@ go.work
 
 # Render
 render-build-progress
+.env
+infra/terraform.tfvars
+bootstrap
+bootstrap.zip
+*.tfstate*
+.terraform/

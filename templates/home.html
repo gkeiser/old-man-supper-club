@@ -1,0 +1,53 @@
+{{template "base" .}}
+
+{{define "title"}}Old Man Supper Club - Home{{end}}
+
+{{define "content"}}
+    <section class="hero">
+        <h1>Old Man Supper Club</h1>
+        <p>A small group of great friends sampling the best local cuisine across the Midwest, with a focus on the hidden gems of Eastern Iowa.</p>
+        {{if not .IsAuthenticated}}
+        <div style="margin-top: 2rem;">
+            <a href="/login" class="btn">Join the Club</a>
+        </div>
+        {{end}}
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">The Midwest Journey</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="/assets/restaurant.jpg" alt="Atmospheric Restaurant">
+                <div class="card-body">
+                    <h3>Local Gems</h3>
+                    <p>From historic Iowa taprooms to modern Midwest bistros, we seek out the places where character and flavor meet.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/food.jpg" alt="Exquisite Food">
+                <div class="card-body">
+                    <h3>Regional Fare</h3>
+                    <p>Celebrating the hearty, soul-warming dishes of the Heartland. If it's local to the Midwest, it's on our table.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/bourbon.jpg" alt="Bourbon Drink">
+                <div class="card-body">
+                    <h3>The Spirits</h3>
+                    <p>Sampling fine bourbons and craft spirits from local distilleries that call the Midwest home.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/assets/beer.jpg" alt="Craft Beer">
+                <div class="card-body">
+                    <h3>Iowa Brews</h3>
+                    <p>A deep appreciation for the thriving craft beer scene in Eastern Iowa and beyond. Cold, local, and shared among friends.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="/leaderboard" class="btn">View the Leaderboard</a>
+        </div>
+    </div>
+{{end}}

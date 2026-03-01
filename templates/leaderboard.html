@@ -1,0 +1,32 @@
+{{template "base" .}}
+
+{{define "title"}}OMSC - Dashboard{{end}}
+
+{{define "content"}}
+    <section class="hero">
+        <h1>Old Man Supper Club</h1>
+        <p>A Midwest Journey for the Discerning Palette</p>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">The Leaderboard</h2>
+        <div class="grid">
+            {{range .Restaurants}}
+            <div class="card">
+                <img src="{{if .ImageURL}}{{.ImageURL}}{{else}}/assets/restaurant.jpg{{end}}" alt="{{.Name}}">
+                <div class="card-body">
+                    <h3><a href="/restaurant/{{.ID}}" style="color: var(--primary); text-decoration: none;">{{.Name}}</a></h3>
+                    <p>{{.Cuisine}}</p>
+                    <p style="font-size: 0.8rem; color: #888;">{{.Location}}</p>
+                    <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <a href="{{.GoogleMapURL}}" target="_blank" style="color: #888; font-size: 0.8rem; text-decoration: none;">📍 Maps</a>
+                        <a href="/restaurant/{{.ID}}" class="btn" style="padding: 0.4rem 1rem; font-size: 0.7rem;">View & Rate</a>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <p style="text-align: center; grid-column: 1/-1;">No restaurants reviewed yet. {{if $.IsAuthenticated}}<a href="/add-restaurant">Add the first one!</a>{{end}}</p>
+            {{end}}
+        </div>
+    </div>
+{{end}}

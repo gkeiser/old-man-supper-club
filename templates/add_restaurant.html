@@ -1,0 +1,38 @@
+{{template "base" .}}
+
+{{define "title"}}Add Restaurant - OMSC{{end}}
+
+{{define "content"}}
+<div class="container" style="max-width: 600px; margin-top: 8rem;">
+    <h2 class="section-title">Add a New Restaurant</h2>
+    
+    <form action="/add-restaurant" method="POST">
+        <div class="form-group">
+            <label>Restaurant Name</label>
+            <input type="text" name="name" required placeholder="e.g. The Map Room">
+        </div>
+        
+        <div class="form-group">
+            <label>Cuisine Type</label>
+            <input type="text" name="cuisine" required placeholder="e.g. Modern American">
+        </div>
+        
+        <div class="form-group">
+            <label>Location (City, State)</label>
+            <input type="text" name="location" required placeholder="e.g. Cedar Rapids, IA">
+        </div>
+
+        <div class="form-group">
+            <label>Google Maps URL</label>
+            <input type="url" name="maps_url" placeholder="https://goo.gl/maps/...">
+        </div>
+
+        <div class="form-group">
+            <label>Image URL (Optional)</label>
+            <input type="url" name="image_url" placeholder="https://example.com/photo.jpg">
+        </div>
+
+        <button type="submit" class="btn">Add Restaurant</button>
+    </form>
+</div>
+{{end}}
