@@ -37,7 +37,7 @@
 
         .navbar {
             padding: 1rem 2rem;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -45,6 +45,7 @@
             top: 0;
             width: 100%;
             z-index: 1000;
+            flex-wrap: wrap;
         }
 
         .navbar a {
@@ -53,10 +54,16 @@
             margin-left: 1.5rem;
             font-size: 0.9rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .navbar a:hover {
             color: var(--primary);
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
         }
 
         .hero {
@@ -175,6 +182,25 @@
             .hero h1 {
                 font-size: 3rem;
             }
+            .navbar {
+                padding: 0.5rem 1rem;
+                justify-content: center;
+            }
+            .navbar .nav-links {
+                width: 100%;
+                justify-content: center;
+                margin-top: 0.5rem;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+            .navbar a {
+                margin: 0 0.5rem;
+                font-size: 0.8rem;
+            }
+            .container {
+                padding: 0 1rem;
+                margin-top: 6rem; /* Adjust for taller wrapped navbar */
+            }
         }
     </style>
 </head>
@@ -182,12 +208,12 @@
 
     <nav class="navbar">
         <a href="/" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-left: 0; color: var(--primary);">OMSC</a>
-        <div>
+        <div class="nav-links">
             <a href="/">Home</a>
             <a href="/leaderboard">Leaderboard</a>
             {{if .IsAuthenticated}}
                 <a href="/add-restaurant">Add Restaurant</a>
-                <a href="/logout">Logout ({{.UserName}})</a>
+                <a href="/logout">Logout</a>
             {{else}}
                 <a href="/login">Login</a>
             {{end}}
