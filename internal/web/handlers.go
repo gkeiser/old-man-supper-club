@@ -72,9 +72,23 @@ func (s *Server) HandleHome(w http.ResponseWriter, r *http.Request) {
 	s.render(w, "home.html", TemplateData{IsAuthenticated: userID != "", UserName: userName})
 }
 
-// HandleLeaderboard shows the dynamic restaurant list.
+// HandleLeaderboard shows the dynamic restaurant list with scores.
 func (s *Server) HandleLeaderboard(w http.ResponseWriter, r *http.Request) {
-	restaurants, _ := s.Repo.ListRestaurants(context.Background())
+	restaurants, reviewsMap, _ := s.Repo.ListRestaurants(context.Background())
+
+	config, _ := s.Repo.GetConfig(context.Background())
+	weights := map[string]float64{"food": 0.5, "atmosphere": 0.2, "value": 0.2, "service": 0.1}
+	if config != nil {
+		weights = config.Weights
+	}
+
+	// Calculate scores for each restaurant
+	for i := range restaurants {
+		resReviews := reviewsMap[restaurants[i].ID]
+		restaurants[i].OverallScore = scoring.CalculateRestaurantOverallScore(resReviews, weights)
+		restaurants[i].ReviewCount = len(resReviews)
+	}
+
 	userID, userName := session.GetUser(r)
 	s.render(w, "leaderboard.html", TemplateData{
 		IsAuthenticated: userID != "",

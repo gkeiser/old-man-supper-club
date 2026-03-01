@@ -17,8 +17,10 @@ type Restaurant struct {
 	Name         string `dynamodbav:"Name"`
 	Location     string `dynamodbav:"Location"`
 	GoogleMapURL string `dynamodbav:"GoogleMapURL"`
-	Cuisine      string `dynamodbav:"Cuisine"`
-	ImageURL     string `dynamodbav:"ImageURL"`
+	Cuisine      string  `dynamodbav:"Cuisine"`
+	ImageURL     string  `dynamodbav:"ImageURL"`
+	OverallScore float64 `dynamodbav:"-"` // Calculated field
+	ReviewCount  int     `dynamodbav:"-"` // Calculated field
 }
 
 // Review represents a member's evaluation

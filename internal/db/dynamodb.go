@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -44,23 +45,49 @@ func (r *Repository) GetConfig(ctx context.Context) (*models.Config, error) {
 	return &config, err
 }
 
-// ListRestaurants fetches all restaurants from the table.
-func (r *Repository) ListRestaurants(ctx context.Context) ([]models.Restaurant, error) {
+// ListRestaurants fetches all restaurant metadata and their reviews to calculate scores.
+func (r *Repository) ListRestaurants(ctx context.Context) ([]models.Restaurant, map[string][]models.Review, error) {
 	out, err := r.client.Scan(ctx, &dynamodb.ScanInput{
 		TableName:        aws.String(r.tableName),
-		FilterExpression: aws.String("begins_with(PK, :pk) AND SK = :sk"),
+		FilterExpression: aws.String("begins_with(PK, :pk)"),
 		ExpressionAttributeValues: map[string]types.AttributeValue{
 			":pk": &types.AttributeValueMemberS{Value: "RESTAURANT#"},
-			":sk": &types.AttributeValueMemberS{Value: "METADATA"},
 		},
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
+	}
+
+	resMap := make(map[string]*models.Restaurant)
+	revMap := make(map[string][]models.Review)
+
+	for _, item := range out.Items {
+		var sk string
+		attributevalue.Unmarshal(item["SK"], &sk)
+
+		var pk string
+		attributevalue.Unmarshal(item["PK"], &pk)
+		restaurantID := strings.TrimPrefix(pk, "RESTAURANT#")
+
+		if sk == "METADATA" {
+			var res models.Restaurant
+			if err := attributevalue.UnmarshalMap(item, &res); err == nil {
+				resMap[restaurantID] = &res
+			}
+		} else if strings.HasPrefix(sk, "REVIEW#") {
+			var rev models.Review
+			if err := attributevalue.UnmarshalMap(item, &rev); err == nil {
+				revMap[restaurantID] = append(revMap[restaurantID], rev)
+			}
+		}
 	}
 
 	var restaurants []models.Restaurant
-	err = attributevalue.UnmarshalListOfMaps(out.Items, &restaurants)
-	return restaurants, err
+	for _, res := range resMap {
+		restaurants = append(restaurants, *res)
+	}
+
+	return restaurants, revMap, nil
 }
 
 // SaveRestaurant persists a new restaurant to DynamoDB.
