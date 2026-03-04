@@ -22,6 +22,6 @@ aws lambda update-function-code --function-name omsc-web-server --zip-file fileb
 
 # 5. Clean up
 echo "🧹 Cleaning up local build files..."
-rm bootstrap bootstrap.zip
+#rm bootstrap bootstrap.zip
 
 echo "✅ Deployment Successful! Your changes are now live."

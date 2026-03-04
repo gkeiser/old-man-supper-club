@@ -9,3 +9,4 @@ A restaurant review site for a private club with weighted scoring.
 - **Database:** DynamoDB (Single Table Design).
 - **Deployment:** AWS Lambda + Function URLs (Preferred Region: us-east-2).
 - **Build Mandate:** ALWAYS run `go mod tidy` and verify the project builds (`go build ./...`) before suggesting a run or deployment to the user.
+- **Security Mandate:** NEVER stage or commit `.env` files, `infra/terraform.tfvars`, or any other files containing API keys, client secrets, or sensitive credentials. Ensure they remain in `.gitignore`.
